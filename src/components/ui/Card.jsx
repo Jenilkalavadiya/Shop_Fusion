@@ -1,8 +1,13 @@
 import React from "react";
-import ReactStars from "react-rating-stars-component";
+// import ReactStars from "react-rating-stars-component";
+import { addItemToCart } from "../../redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 const Card = ({ item }) => {
-  const { id, title, price, description, category, image, rating } = item;
+  const dispatch = useDispatch();
+  // console.log(cartItem)
+  // console.log("cartitem", cartItem);
+  const { title, price, description, image, rating } = item;
   return (
     // <div className="flex flex-col">
     <div className="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] py-2 max-w-[350px] max-h-[650px] p-2 rounded-lg font-[sans-serif] overflow-hidden mx-auto mt-2">
@@ -41,12 +46,13 @@ const Card = ({ item }) => {
           </h3>
         </div>
         <div className="btn-div flex justify-center items-center mt-4">
-        <button
-          type="button"
-          className="px-5 py-2.5 rounded-lg text-white text-sm tracking-wider w-2/5 bg-blue-600 hover:bg-blue-700 outline-none"
-        >
-          Order now
-        </button>
+          <button
+            type="button"
+            className="px-5 py-2.5 rounded-lg text-white text-sm tracking-wider w-2/5 bg-blue-600 hover:bg-blue-700 outline-none"
+            onClick={() => dispatch(addItemToCart(item))}
+          >
+            Order now
+          </button>
         </div>
       </div>
     </div>

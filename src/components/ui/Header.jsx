@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const count = useSelector((state) => state.cartSlice.cart);
   return (
     <div className="header-container">
-      <div className="navbar h-[80px] shadow-lg bg-gray-900 text-white flex justify-between items-center p-9">
+      <div className="navbar h-[80px] shadow-lg bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 text-white flex justify-between items-center p-9">
         <div className="logo">
           <NavLink className="text-3xl" to="/">
             Shop Fusion
@@ -31,12 +33,13 @@ const Header = () => {
           </div>
         </ul>
         <div className="btn flex justify-center items-center gap-10">
-          <button className="text-xl w-32 bg-stone-600 text-white rounded-full py-3">
+          <button className="text-xl w-32 bg-teal-200 text-black rounded-full py-3">
             <NavLink to="/signup" className="font-semibold">
               Login
             </NavLink>
           </button>
-          <NavLink to="/cart" className="text-2xl ">
+          <NavLink to="/cart" className="text-xl">
+            <sup>{count.length}</sup>
             <FaShoppingCart />
           </NavLink>
         </div>
