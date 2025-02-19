@@ -11,6 +11,7 @@ export const userSlice = createSlice({
     authentication(state, action) {
       const loggedIn = JSON.parse(localStorage.getItem("loggedin"));
       state.login = loggedIn;
+      console.log("aaa", initialState.login);
     },
   },
 });

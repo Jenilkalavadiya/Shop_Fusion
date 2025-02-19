@@ -9,6 +9,7 @@ import Contact from "./pages/Contact";
 import Loginpage from "./pages/Loginpage";
 import Signup from "./pages/Signup";
 
+import Checkform from "./components/ui/Checkform";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -19,7 +20,7 @@ const router = createBrowserRouter([
         element: <Shop />,
       },
       {
-        path: "/cart",
+        path: "cart",
         element: <Cart />,
       },
       {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/signup",
         element: <Signup />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkform />,
       },
     ],
   },

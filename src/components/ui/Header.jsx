@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,9 +8,9 @@ const Header = () => {
   // const username = JSON.parse(localStorage.getItem("user"));
   const vap = useSelector((state) => state.userSlice.login);
   const count = useSelector((state) => state.cartSlice.cart);
+  // console.log("Count", count);
   const dispatch = useDispatch();
 
-  console.log("vap", vap);
   const handleLogOut = () => {
     localStorage.removeItem("loggedin");
     dispatch(authentication(true));

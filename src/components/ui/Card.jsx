@@ -1,7 +1,8 @@
 import React from "react";
 // import ReactStars from "react-rating-stars-component";
-import { addItemToCart } from "../../redux/cartSlice";
+
 import { useDispatch } from "react-redux";
+import { addItemToCart } from "../../redux/cartSlice";
 
 const Card = ({ item }) => {
   const dispatch = useDispatch();
