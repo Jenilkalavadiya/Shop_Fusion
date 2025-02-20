@@ -10,6 +10,7 @@ const Cart = () => {
   };
   const cartItem = useSelector((state) => state.cartSlice.cart);
   console.log("cartItem1", cartItem);
+
   // const dispatch = useDispatch();
   const total = cartItem.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -26,12 +27,13 @@ const Cart = () => {
       <h1 className="text-3xl font-bold text-black text-start">Cart</h1>
       {cartItem.length > 0
         ? cartItem.map((cartData, index) => {
+            console.log("cartItem2", cartData);
             // const { title, price, description, image, rating } = cartItem;
             return (
               <CartDetails
                 cartData={cartData}
                 index={index}
-                cartItem={cartItem}
+                // cartItem={cartItem}
               />
             );
           })

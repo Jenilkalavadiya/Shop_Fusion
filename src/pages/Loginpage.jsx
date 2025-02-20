@@ -2,9 +2,10 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { authentication } from "../redux/userSlice";
-import { Field, Form, Formik, validateYupSchema } from "formik";
+import { Field, Form, Formik } from "formik";
 
 import { validationSchema } from "../schemas";
+import { toast } from "react-toastify";
 
 const Loginpage = () => {
   const initialValues = {
@@ -18,16 +19,23 @@ const Loginpage = () => {
   const handleLogin = (values) => {
     console.log("Login", values);
     const loggedUser = JSON.parse(localStorage.getItem("user"));
-    console.log("loggedUser", loggedUser);
-    if (
-      loggedUser.email === values.email &&
-      loggedUser.password === values.password
-    ) {
-      localStorage.setItem("loggedin", true);
-      dispatch(authentication(true));
-      navigate("/");
-    } else {
-      // navigate("/signup");
+
+    let userFound = false;
+
+    loggedUser.map((currData) => {
+      if (
+        currData.email === values.email &&
+        currData.password === values.password
+      ) {
+        localStorage.setItem("loggedin", true);
+        toast.success("Login Successfull");
+        dispatch(authentication(true));
+        navigate("/");
+        userFound = true;
+      }
+    });
+    if (!userFound) {
+      toast.error("Invalid Email or Password");
     }
   };
 
@@ -82,7 +90,6 @@ const Loginpage = () => {
                       name="password"
                       id="password"
                       type="password"
-                    
                       autoComplete="current-password"
                       className="bg-gray-100 w-full text-sm text-gray-800 px-4 py-3.5 rounded-md outline-blue-600 focus:bg-transparent"
                       placeholder="Password"

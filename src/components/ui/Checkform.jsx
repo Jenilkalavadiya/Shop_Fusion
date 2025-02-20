@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 const Checkform = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const formData = new FormData(event.target);
-    console.log("FormData", formData);
+    const data = Object.fromEntries(formData);
+    console.log(data);
   };
 
   const navigate = useNavigate();

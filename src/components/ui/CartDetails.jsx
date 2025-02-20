@@ -9,10 +9,12 @@ import {
   increaseItemQuantity,
 } from "../../redux/cartSlice";
 // import { TbAxe } from "react-icons/tb";
+// import OrderComplete from "../components/ui/OrderComplete";
 
 const CartDetails = ({ cartData, index }) => {
   const dispatch = useDispatch();
   const { title, price, description, image, category, id, quantity } = cartData;
+
 
   return (
     <>

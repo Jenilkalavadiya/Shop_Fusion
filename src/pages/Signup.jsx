@@ -1,19 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import { signUpvalidation } from "../schemas/signUpvalidation";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const Signup = () => {
+const Signup = (values) => {
+  const [user, setUser] = useState([]);
   const navigate = useNavigate();
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    // Save the form data to localStorage
-    localStorage.setItem("user", JSON.stringify(values));
-    console.log("User saved to localStorage");
-    // Redirect to login page after successful form submission
-    navigate("/Loginpage");
+  const handleSubmit = async (values) => {
+    const validUser = user.some((data) => data.email === values.email);
+
+    try {
+      if (validUser) {
+        toast.error("User Already Registered");
+      } else {
+        const response = await axios.post(
+          "http://localhost:3001/api/users",
+          values
+        );
+        toast.success("User created successfully");
+        navigate("/Loginpage");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  // Get request to validate user
+
+  const getAllUser = async (values) => {
+    const res = await axios.get("http://localhost:3002/user", values);
+    console.log("result", res);
+    setUser(res.data);
+  };
+  console.log("first", user);
+
+  useEffect(() => {
+    getAllUser();
+  }, []);
 
   return (
     <div className="flex justify-center min-h-[800px]">

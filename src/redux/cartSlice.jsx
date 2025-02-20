@@ -44,20 +44,18 @@ export const cartSlice = createSlice({
       state.totalQuantity = totalQuantity;
     },
     increaseItemQuantity: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload) {
-          return { ...item, quantity: item.quantity + 1 };
-        }
-        return item;
-      });
+      const item = state.cart.find((item) => item.id === action.payload);
+      if (item) {
+        item.quantity += 1;
+      }
     },
     decreaseItemQuantity: (state, action) => {
-      state.cart = state.cart.map((item) => {
-        if (item.id === action.payload) {
-          return { ...item, quantity: item.quantity - 1 };
-        }
-        return item;
-      });
+      const item = state.cart.find((item) => item.id === action.payload);
+      if (item.quantity === 1) {
+        item.quantity = 1;
+      } else {
+        item.quantity--;
+      }
     },
   },
 });

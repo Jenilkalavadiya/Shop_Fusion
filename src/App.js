@@ -10,6 +10,7 @@ import Loginpage from "./pages/Loginpage";
 import Signup from "./pages/Signup";
 
 import Checkform from "./components/ui/Checkform";
+import OrderComplete from "./components/ui/OrderComplete";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/checkout",
         element: <Checkform />,
+      },
+      {
+        path: "/OrderComplete",
+        element: <OrderComplete />,
       },
     ],
   },
