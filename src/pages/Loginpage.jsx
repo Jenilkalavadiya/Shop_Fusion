@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { authentication } from "../redux/userSlice";
@@ -6,8 +6,10 @@ import { Field, Form, Formik } from "formik";
 
 import { validationSchema } from "../schemas";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const Loginpage = () => {
+  const [loggedUser, setLoggedUser] = useState([]);
   const initialValues = {
     email: "",
     password: "",
@@ -16,12 +18,23 @@ const Loginpage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogin = (values) => {
-    console.log("Login", values);
-    const loggedUser = JSON.parse(localStorage.getItem("user"));
+  const getAllUser = async (values) => {
+    // console.log("response", values);
+    const res = await axios.get("http://localhost:3002/user", values);
+    const data = res.data;
+    setLoggedUser(data);
+  };
 
+  // console.log("first", user);
+
+  useEffect(() => {
+    getAllUser();
+  }, []);
+
+  const handleLogin = (values) => {
     let userFound = false;
 
+    // eslint-disable-next-line array-callback-return
     loggedUser.map((currData) => {
       if (
         currData.email === values.email &&
@@ -33,6 +46,7 @@ const Loginpage = () => {
         navigate("/");
         userFound = true;
       }
+      localStorage.setItem("LoggedID", currData.id);
     });
     if (!userFound) {
       toast.error("Invalid Email or Password");
@@ -72,7 +86,7 @@ const Loginpage = () => {
                 <h3 className="text-gray-800 text-3xl font-extrabold mb-8">
                   Login
                 </h3>
-                {console.log("object", errors)}
+                {/* {console.log("object", errors)} */}
                 <div className="space-y-4">
                   <div>
                     <Field

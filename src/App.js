@@ -11,6 +11,15 @@ import Signup from "./pages/Signup";
 
 import Checkform from "./components/ui/Checkform";
 import OrderComplete from "./components/ui/OrderComplete";
+import ProtectedRoutes from "./pages/ProtectedRoutes";
+
+const App = () => {
+ 
+  return <RouterProvider router={router}></RouterProvider>;
+};
+
+export default App;
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,12 +30,18 @@ const router = createBrowserRouter([
         element: <Shop />,
       },
       {
-        path: "cart",
-        element: <Cart />,
-      },
-      {
-        path: "/about",
-        element: <About />,
+        element: <ProtectedRoutes />,
+        children: [
+          {
+            path: `/cart`,
+            element: <Cart />,
+          },
+
+          {
+            path: "/about",
+            element: <About />,
+          },
+        ],
       },
       {
         path: "/contact",
@@ -51,9 +66,3 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-const App = () => {
-  return <RouterProvider router={router}></RouterProvider>;
-};
-
-export default App;

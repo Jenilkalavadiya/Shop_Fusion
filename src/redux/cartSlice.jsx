@@ -17,6 +17,8 @@ export const cartSlice = createSlice({
       } else {
         state.cart.push({ ...action.payload, quantity: 1 });
       }
+
+      localStorage.setItem("cartItem", JSON.stringify(state.cart));
     },
     deleteItemToCart(state, action) {
       state.cart = state.cart.filter((item, index) => index !== action.payload);
@@ -56,6 +58,15 @@ export const cartSlice = createSlice({
       } else {
         item.quantity--;
       }
+    },
+    ORDER_PLACED: (state, action) => {
+      const ordered = ordered(action.payload);
+      console.log("order", action.payload);
+      return (state = []);
+    },
+
+    LOGOUT: (state, achtion) => {
+      return (state = []);
     },
   },
 });

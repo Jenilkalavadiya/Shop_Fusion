@@ -10,18 +10,19 @@ const Signup = (values) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
+    // console.log("values", values);
+    // console.log("User", user);
     const validUser = user.some((data) => data.email === values.email);
-
+    // console.log("Validate", validUser);
     try {
       if (validUser) {
         toast.error("User Already Registered");
       } else {
-        const response = await axios.post(
-          "http://localhost:3001/api/users",
-          values
-        );
+        const response = await axios.post("http://localhost:3002/user", values);
         toast.success("User created successfully");
         navigate("/Loginpage");
+        // console.log("response", response);
+        setUser(response);
       }
     } catch (error) {
       console.log(error);
@@ -32,10 +33,11 @@ const Signup = (values) => {
 
   const getAllUser = async (values) => {
     const res = await axios.get("http://localhost:3002/user", values);
-    console.log("result", res);
+    // console.log("result", res);
     setUser(res.data);
   };
-  console.log("first", user);
+
+  // console.log("first", user);
 
   useEffect(() => {
     getAllUser();
