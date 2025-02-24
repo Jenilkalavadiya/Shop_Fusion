@@ -42,11 +42,13 @@ const Loginpage = () => {
       ) {
         localStorage.setItem("loggedin", true);
         toast.success("Login Successfull");
+        localStorage.setItem("isActive", JSON.stringify(currData.id));
+        localStorage.setItem("UserDetail", JSON.stringify(currData));
         dispatch(authentication(true));
         navigate("/");
         userFound = true;
       }
-      localStorage.setItem("LoggedID", currData.id);
+      // localStorage.setItem("LoggedID", currData.id);
     });
     if (!userFound) {
       toast.error("Invalid Email or Password");

@@ -1,4 +1,5 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const Checkform = () => {
@@ -9,6 +10,7 @@ const Checkform = () => {
     console.log(data);
   };
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleCancelClick = () => {
     navigate("/cart");
@@ -122,6 +124,7 @@ const Checkform = () => {
               <button
                 type="submit"
                 className="rounded-md px-4 py-2.5 w-full text-sm tracking-wide bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={()=>dispatch()}
               >
                 Complete Purchase
               </button>

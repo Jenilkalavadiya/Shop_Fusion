@@ -28,28 +28,12 @@ export const cartSlice = createSlice({
         (acc, item) => acc + item.price * item.quantity
       );
     },
-    getCartTotal: (state) => {
-      let { totalQuantity, totalPrice } = state.cart.reduce(
-        (cartTotal, cartItem) => {
-          const { price, quantity } = cartItem;
-          const itemTotal = price * quantity;
-          cartTotal.totalPrice += itemTotal;
-          cartTotal.totalQuantity += quantity;
-          return cartTotal;
-        },
-        {
-          totalPrice: 0,
-          totalQuantity: 0,
-        }
-      );
-      state.totalPrice = parseInt(totalPrice.toFixed(2));
-      state.totalQuantity = totalQuantity;
-    },
     increaseItemQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
       if (item) {
         item.quantity += 1;
       }
+      localStorage.setItem("cartItem", JSON.stringify(state.cart));
     },
     decreaseItemQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
@@ -58,14 +42,9 @@ export const cartSlice = createSlice({
       } else {
         item.quantity--;
       }
+      localStorage.setItem("cartItem", JSON.stringify(state.cart));
     },
-    ORDER_PLACED: (state, action) => {
-      const ordered = ordered(action.payload);
-      console.log("order", action.payload);
-      return (state = []);
-    },
-
-    LOGOUT: (state, achtion) => {
+    LOGOUT: (state, action) => {
       return (state = []);
     },
   },
@@ -75,7 +54,6 @@ export const {
   addItemToCart,
   deleteItemToCart,
   totalsum,
-  getCartTotal,
   increaseItemQuantity,
   decreaseItemQuantity,
 } = cartSlice.actions;

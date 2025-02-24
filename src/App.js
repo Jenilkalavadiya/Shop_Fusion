@@ -14,7 +14,6 @@ import OrderComplete from "./components/ui/OrderComplete";
 import ProtectedRoutes from "./pages/ProtectedRoutes";
 
 const App = () => {
- 
   return <RouterProvider router={router}></RouterProvider>;
 };
 

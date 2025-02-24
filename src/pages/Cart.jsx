@@ -22,37 +22,69 @@ const Cart = () => {
   };
 
   const fetchUserId = async () => {
-    const id = localStorage.getItem("LoggedID");
+    const id = JSON.parse(localStorage.getItem("isActive"));
+    // console.log("FetchID", id);
     if (id) {
       setUserId(id);
-      setCartItems(); // Store the user ID in state
     }
   };
 
-  const setCartItems = async () => {
-    console.log("Cart", cartItem);
-    const response = await axios.post("http://localhost:3002/order", {
-      cartItem: cartItem,
-      userId: userId,
-    });
-    console.log("hiiii", response);
-    console.log("iiiiiiiiiiid", userId);
-    getCartItems();
-  };
+  // console.log("savedid", userId);
+  // const setCartItems = async () => {
+  //   // console.log("Cart", cartItem);
+  //   const response = await axios.post("http://localhost:3002/order", {
+  //     cartItem: cartItem,
+  //     userId: userId,
+  //   });
+  //   console.log("Posted response", response);
+  //   // console.log("iiiiiiiiiiid", userId);
+  // };
 
-  const getCartItems = async () => {
+  const setCartItems = async () => {
     if (userId) {
       try {
-        console.log("USer", userId);
-        const response = await axios.get(`http://localhost:3002/order`);
-        console.log("Peh", response.data);
-        setItems(cartItem); // Set the cart items in state from the server
+        const existingOrderResponse = await axios.get(
+          `http://localhost:3002/order?userId=${userId}`
+        );
+        if (existingOrderResponse.data.length > 0) {
+          // Update the existing order if it exists
+          const order = existingOrderResponse.data[0];
+          const updatedOrder = { ...order, cartItem: cartItem };
+          await axios.put(
+            `http://localhost:3002/order/${order.id}`,
+            updatedOrder
+          );
+        } else {
+          // Create a new order if no existing cart is found
+          await axios.post("http://localhost:3002/order", {
+            userId: userId,
+            cartItem: cartItem,
+          });
+        }
+      } catch (error) {
+        console.error("Error saving cart data:", error);
+      }
+    }
+  };
+  
+
+
+  const getCartItems = async (userID) => {
+    if (userID) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3002/order?userId=${userID}`
+        );
+        console.log("response", response.data);
+        // Update the state with the fetched cart items
+        setItems(response.data[0]?.cartItem || []); 
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
     }
   };
-
+  
+  
   // Fetch user ID on component mount
   useEffect(() => {
     fetchUserId();
@@ -63,6 +95,10 @@ const Cart = () => {
     if (userId) {
       setCartItems();
     }
+  }, [userId]);
+
+  useEffect(() => {
+    getCartItems(userId);
   }, [userId]);
 
   const handleBuyNow = () => {
@@ -110,7 +146,7 @@ const Cart = () => {
             type="button"
             onClick={handleBuyNow}
             className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-800 hover:bg-gray-900 text-white rounded-md"
-          >
+            >
             Buy Now
           </button>
         </div>
@@ -120,7 +156,7 @@ const Cart = () => {
             src="https://readymadeui.com/images/master.webp"
             alt="card1"
             className="w-10 object-contain"
-          />
+            />
           <img
             src="https://readymadeui.com/images/visa.webp"
             alt="card2"
@@ -130,7 +166,7 @@ const Cart = () => {
             src="https://readymadeui.com/images/american-express.webp"
             alt="card3"
             className="w-10 object-contain"
-          />
+            />
         </div>
       </div>
     </div>
@@ -138,3 +174,20 @@ const Cart = () => {
 };
 
 export default Cart;
+
+  // const getCartItems = async (userID) => {
+  //   if (userId) {
+  //     try {
+  //       // console.log("LoggeduserID", userId);
+  //       const response = await axios.get(
+  //         `http://localhost:3002/order?id=${userID}`,
+  //         userID
+  //       );
+  //       console.log("response", response);
+  //       // console.log("Getting data", response.data);
+  //       setItems(cartItem);
+  //     } catch (error) {
+  //       console.error("Error fetching cart data:", error);
+  //     }
+  //   }
+  // };

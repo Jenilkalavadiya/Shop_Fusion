@@ -4,13 +4,13 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../redux/cartSlice";
 
-const  Card = ({ item }) => {
+const Card = ({ item }) => {
   const dispatch = useDispatch();
   // console.log(cartItem)
   // console.log("cartitem", cartItem);
   const { title, price, description, image, rating } = item;
-  const id = localStorage.getItem("LoggedID");
-  console.log("id", id);
+  const id = localStorage.getItem("isActive");
+  // console.log("id", id);
   return (
     // <div className="flex flex-col">
     <div className="bg-white shadow-[0_4px_12px_-5px_rgba(0,0,0,0.4)] py-2 max-w-[350px] max-h-[650px] p-2 rounded-lg font-[sans-serif] overflow-hidden mx-auto mt-2">
