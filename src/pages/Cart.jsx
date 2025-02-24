@@ -55,7 +55,6 @@ const Cart = () => {
             updatedOrder
           );
         } else {
-          // Create a new order if no existing cart is found
           await axios.post("http://localhost:3002/order", {
             userId: userId,
             cartItem: cartItem,
@@ -83,6 +82,7 @@ const Cart = () => {
       }
     }
   };
+  
   
   
   // Fetch user ID on component mount

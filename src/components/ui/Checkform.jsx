@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setCurrentOrder } from "../../redux/orderSlice";
 
 const Checkform = () => {
   const handleSubmit = (event) => {
@@ -14,6 +15,11 @@ const Checkform = () => {
   const navigate = useNavigate();
   const handleCancelClick = () => {
     navigate("/cart");
+  };
+
+  const handleComplete = () => {
+    dispatch(setCurrentOrder({ id: 1, name: "Order 1", status: "pending" }));
+    navigate("/OrderComplete");
   };
 
   return (
@@ -124,7 +130,7 @@ const Checkform = () => {
               <button
                 type="submit"
                 className="rounded-md px-4 py-2.5 w-full text-sm tracking-wide bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={()=>dispatch()}
+                onClick={handleComplete}
               >
                 Complete Purchase
               </button>

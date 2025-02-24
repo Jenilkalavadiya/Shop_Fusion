@@ -1,15 +1,30 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const OrderComplete = () => {
-  const cartItem = JSON.parse(localStorage.getItem("cartItem"));
+  const [packed, setPacked] = useState([]);
+  // const cartItem = JSON.parse(localStorage.getItem("cartItem"));
 
-  //   console.log("cartItem", tt);
+  const userID = JSON.parse(localStorage.getItem("isActive"));
+  console.log("Order User ID", userID);
+
+  const getData = async () => {
+    const response = await axios.get(
+      `http://localhost:3002/order?userId=${userID}`
+    );
+    console.log("firstres", response.data[0].cartItem);
+    setPacked(response.data[0].cartItem);
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <div className="flex flex-col items-center h-screen w-screen">
       <h1 className="text-3xl font-bold mt-16">Order Complete</h1>
       <div className="w-[300px] border-b-2 border-black h-[5px] "></div>
-      {cartItem?.map((curElem) => {
+      {packed?.map((curElem) => {
         const { title, price, image, quantity } = curElem;
         return (
           <div className="flex items-start w-96 gap-4">
