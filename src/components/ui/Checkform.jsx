@@ -1,25 +1,33 @@
-import React from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { setCurrentOrder } from "../../redux/orderSlice";
+import axios from "axios";
 
 const Checkform = () => {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
-    console.log(data);
+    try {
+      const res = await axios.post("http://localhost:3002/orderplaced", {
+        userID: userID,
+        formdata: data,
+        cartItem: cartItem,
+      });
+      if (res.status === 201) {
+        navigate("/ordercomplete");
+        // localStorage.removeItem("cartItem");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  // console.log("FormData", formdata);
 
-  const dispatch = useDispatch();
+  const cartItem = JSON.parse(localStorage.getItem("cartItem"));
+  const userID = JSON.parse(localStorage.getItem("isActive"));
+
   const navigate = useNavigate();
   const handleCancelClick = () => {
     navigate("/cart");
-  };
-
-  const handleComplete = () => {
-    dispatch(setCurrentOrder({ id: 1, name: "Order 1", status: "pending" }));
-    navigate("/OrderComplete");
   };
 
   return (
@@ -40,6 +48,7 @@ const Checkform = () => {
                   name="Fname"
                   id="Fname"
                   placeholder="First Name"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -50,16 +59,7 @@ const Checkform = () => {
                   name="Lname"
                   id="Lname"
                   placeholder="Last Name"
-                  className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
-                />
-              </div>
-
-              <div>
-                <input
-                  type="email"
-                  name="Email"
-                  id="Email"
-                  placeholder="Email"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -70,6 +70,7 @@ const Checkform = () => {
                   name="Pnumber"
                   id="Pnumber"
                   placeholder="Phone No."
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -87,6 +88,7 @@ const Checkform = () => {
                   name="Address"
                   id="Address"
                   placeholder="Address Line"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -96,6 +98,7 @@ const Checkform = () => {
                   name="City"
                   id="City"
                   placeholder="City"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -105,6 +108,7 @@ const Checkform = () => {
                   name="State"
                   id="State"
                   placeholder="State"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -114,6 +118,7 @@ const Checkform = () => {
                   name="Zip"
                   id="Zip"
                   placeholder="Zip Code"
+                  required
                   className="px-4 py-3 bg-gray-100 focus:bg-transparent text-gray-800 w-full text-sm rounded-md focus:outline-blue-600"
                 />
               </div>
@@ -127,11 +132,7 @@ const Checkform = () => {
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="rounded-md px-4 py-2.5 w-full text-sm tracking-wide bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={handleComplete}
-              >
+              <button className="rounded-md px-4 py-2.5 w-full text-sm tracking-wide bg-blue-600 hover:bg-blue-700 text-white">
                 Complete Purchase
               </button>
             </div>

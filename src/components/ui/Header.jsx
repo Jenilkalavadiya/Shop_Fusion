@@ -23,12 +23,13 @@ const Header = () => {
   // const user = useSelector((state)=>{state.us})
   // console.log("currUserData", currentUser.name);
   return (
-    <div className="header-container">
+    <div className="header-container w-screen fixed">
       <div className="navbar h-[80px] shadow-lg bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 text-white flex justify-between items-center p-9">
         <div className="logo">
           <NavLink className="text-3xl" to="/">
             Shop Fusion
           </NavLink>
+          <pre className="text-sm">Customer satisfaction is our moto</pre>
         </div>
         <ul>
           <div className="links flex justify-center items-center gap-10">
@@ -49,14 +50,16 @@ const Header = () => {
             </li>
           </div>
         </ul>
-        <div className="btn flex justify-center items-center gap-10">
+        <div className="btn flex justify-center items-center gap-10 flex items-center">
           {user ? (
             <>
               <span className="text-xl font-bold bg-slate-200 p-2 rounded-full text-black">
                 {currentUser ? currentUser.name : ""}
               </span>
-              <NavLink to="/cart" className="text-xl">
-                <sup>{cartItem.length}</sup>
+              <NavLink to="/cart" className="text-xl ">
+                <span className="bg-slate-200 rounded-full relative px-1 text-sm text-black right-[-16px] top-[12px] left-[12px]">
+                  {cartItem.length}
+                </span>
                 <FaShoppingCart />
               </NavLink>
             </>

@@ -133,12 +133,6 @@ const Loginpage = () => {
                   </button>
                 </div>
 
-                <div className="my-4 flex items-center gap-4">
-                  <hr className="w-full border-gray-300" />
-                  <p className="text-sm text-gray-800 text-center">or</p>
-                  <hr className="w-full border-gray-300" />
-                </div>
-
                 <div className="space-x-6 flex justify-center">
                   {/* Add social login buttons here */}
                 </div>
