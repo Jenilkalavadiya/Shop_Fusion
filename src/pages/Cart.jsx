@@ -29,17 +29,6 @@ const Cart = () => {
     }
   };
 
-  // console.log("savedid", userId);
-  // const setCartItems = async () => {
-  //   // console.log("Cart", cartItem);
-  //   const response = await axios.post("http://localhost:3002/order", {
-  //     cartItem: cartItem,
-  //     userId: userId,
-  //   });
-  //   console.log("Posted response", response);
-  //   // console.log("iiiiiiiiiiid", userId);
-  // };
-
   const setCartItems = async () => {
     if (userId) {
       try {
@@ -65,8 +54,6 @@ const Cart = () => {
       }
     }
   };
-  
-
 
   const getCartItems = async (userID) => {
     if (userID) {
@@ -76,21 +63,17 @@ const Cart = () => {
         );
         console.log("response", response.data);
         // Update the state with the fetched cart items
-        setItems(response.data[0]?.cartItem || []); 
+        setItems(response.data[0]?.cartItem || []);
       } catch (error) {
         console.error("Error fetching cart data:", error);
       }
     }
   };
-  
-  
-  
-  // Fetch user ID on component mount
+
   useEffect(() => {
     fetchUserId();
   }, []);
 
-  // Fetch the cart items after the user ID is retrieved
   useEffect(() => {
     if (userId) {
       setCartItems();
@@ -103,6 +86,7 @@ const Cart = () => {
 
   const handleBuyNow = () => {
     navigate("/checkout");
+    
   };
 
   return (
@@ -146,7 +130,7 @@ const Cart = () => {
             type="button"
             onClick={handleBuyNow}
             className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-800 hover:bg-gray-900 text-white rounded-md"
-            >
+          >
             Buy Now
           </button>
         </div>
@@ -156,7 +140,7 @@ const Cart = () => {
             src="https://readymadeui.com/images/master.webp"
             alt="card1"
             className="w-10 object-contain"
-            />
+          />
           <img
             src="https://readymadeui.com/images/visa.webp"
             alt="card2"
@@ -166,7 +150,7 @@ const Cart = () => {
             src="https://readymadeui.com/images/american-express.webp"
             alt="card3"
             className="w-10 object-contain"
-            />
+          />
         </div>
       </div>
     </div>
@@ -174,20 +158,3 @@ const Cart = () => {
 };
 
 export default Cart;
-
-  // const getCartItems = async (userID) => {
-  //   if (userId) {
-  //     try {
-  //       // console.log("LoggeduserID", userId);
-  //       const response = await axios.get(
-  //         `http://localhost:3002/order?id=${userID}`,
-  //         userID
-  //       );
-  //       console.log("response", response);
-  //       // console.log("Getting data", response.data);
-  //       setItems(cartItem);
-  //     } catch (error) {
-  //       console.error("Error fetching cart data:", error);
-  //     }
-  //   }
-  // };

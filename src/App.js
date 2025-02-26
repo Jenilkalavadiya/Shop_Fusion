@@ -59,7 +59,7 @@ const router = createBrowserRouter([
         element: <Checkform />,
       },
       {
-        path: "/OrderComplete",
+        path: "/orderComplete",
         element: <OrderComplete />,
       },
     ],

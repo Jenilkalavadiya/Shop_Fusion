@@ -1,22 +1,23 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { authentication } from "../../redux/userSlice";
 
 const Header = () => {
-  // const username = JSON.parse(localStorage.getItem("user"));
-  const user = useSelector((state) => state.userSlice.login);
   const cartItem = useSelector((state) => state.cartSlice.cart);
-  // console.log("cartItem123", cartItem);
+  const user = useSelector((state) => state.userSlice.login);
+  const [items, setItems] = useState(cartItem);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogOut = () => {
     localStorage.removeItem("loggedin");
-    localStorage.removeItem("cartItem");
+    setItems([]);
     localStorage.removeItem("isActive");
     localStorage.removeItem("UserDetail");
     dispatch(authentication(true));
+    navigate("/Loginpage");
   };
 
   const currentUser = JSON.parse(localStorage.getItem("UserDetail"));
@@ -50,31 +51,54 @@ const Header = () => {
             </li>
           </div>
         </ul>
-        <div className="btn flex justify-center items-center gap-10 flex items-center">
+        <div className="btn flex justify-center items-center gap-10">
           {user ? (
             <>
-              <span className="text-xl font-bold bg-slate-200 p-2 rounded-full text-black">
-                {currentUser ? currentUser.name : ""}
-              </span>
-              <NavLink to="/cart" className="text-xl ">
-                <span className="bg-slate-200 rounded-full relative px-1 text-sm text-black right-[-16px] top-[12px] left-[12px]">
+              <NavLink to="/cart" className="text-2xl relative">
+                <p className="bg-slate-200 text-center rounded-full absolute text-sm text-black right-[-16px] top-[-9px] left-[12px] w-4 h-4">
                   {cartItem.length}
-                </span>
+                </p>
                 <FaShoppingCart />
               </NavLink>
             </>
           ) : (
             ""
           )}
-          <button className="text-xl w-32 bg-teal-200 text-black rounded-full py-3">
-            <NavLink
-              to="/Loginpage"
-              className="font-semibold"
-              onClick={handleLogOut}
+
+          <div className="menu">
+            <select
+              name="menu"
+              id="menu"
+              className="bg-slate-900"
+              onChange={(e) => {
+                if (e.target.value === "orderComplete") {
+                  navigate("/orderComplete");
+                }
+                if (e.target.value === "user") {
+                  navigate("/");
+                }
+                if (e.target.value === "logout") {
+                  // navigate("/Loginpage");
+                  handleLogOut();
+                  localStorage.removeItem("cartItem");
+                }
+              }}
             >
-              {user ? "LogOut" : "Login"}
-            </NavLink>
-          </button>
+              <option value="user">
+                <span className="text-xl font-bold bg-slate-200 p-2 rounded-full text-black">
+                  {user ? currentUser.name : "Please Login"}
+                </span>
+              </option>
+
+              {user ? <option value="orderComplete">Your Orders</option> : ""}
+
+              <option value="logout">
+                <NavLink onClick={handleLogOut}>
+                  {user ? "LogOut" : "Login"}
+                </NavLink>
+              </option>
+            </select>
+          </div>
         </div>
       </div>
     </div>

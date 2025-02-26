@@ -18,7 +18,7 @@ const Shop = () => {
     fetchData();
   }, []);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 p-3">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 py-20">
       {apidata.map((item, index) => {
         return <Card item={item} key={index} />;
       })}

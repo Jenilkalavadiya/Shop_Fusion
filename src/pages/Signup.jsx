@@ -10,8 +10,7 @@ const Signup = (values) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-    // console.log("values", values);
-    // console.log("User", user);
+  
     const validUser = user.some((data) => data.email === values.email);
     // console.log("Validate", validUser);
     try {

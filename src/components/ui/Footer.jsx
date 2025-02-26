@@ -2,12 +2,12 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900  pt-12 pb-6 px-10 font-sans tracking-wide relative">
+    <footer className="bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 pt-12 pb-6 px-10 font-sans tracking-wide">
       <div className="max-w-screen-xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <h2 className="text-white text-sm uppercase font-semibold mb-4">
-              Quick Links
+              only Fix Rate
             </h2>
             <ul className="space-y-3">
               <li>
@@ -15,7 +15,7 @@ const Footer = () => {
                   href="javascriptvoid(0)"
                   className="text-gray-400 hover:text-white text-sm transition-all"
                 >
-                  NewTrends
+                  No Bhavtal
                 </a>
               </li>
               <li>
@@ -23,7 +23,7 @@ const Footer = () => {
                   href="javascriptvoid(0)"
                   className="text-gray-400 hover:text-white text-sm transition-all"
                 >
-                  Market Prices
+                  Ek j bhav
                 </a>
               </li>
               <li>
@@ -31,7 +31,7 @@ const Footer = () => {
                   href="javascriptvoid(0)"
                   className="text-gray-400 hover:text-white text-sm transition-all"
                 >
-                  Categories
+                  levu che k nai?
                 </a>
               </li>
             </ul>

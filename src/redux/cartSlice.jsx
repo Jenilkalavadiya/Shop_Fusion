@@ -22,6 +22,7 @@ export const cartSlice = createSlice({
     },
     deleteItemToCart(state, action) {
       state.cart = state.cart.filter((item, index) => index !== action.payload);
+      localStorage.setItem("cartItem", JSON.stringify(state.cart));
     },
     totalsum(state, action) {
       state.cart = state.cart.reduce(
