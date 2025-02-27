@@ -2,12 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const OrderComplete = () => {
-  // const [cartitem, setCartItem] = useState([]);
   const [allOrders, setAllOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null); // State to store selected order details
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const userID = JSON.parse(localStorage.getItem("isActive"));
-  console.log("Order User ID", userID);
 
   const getOrderDetails = async () => {
     const res = await axios.get(
@@ -22,7 +20,7 @@ const OrderComplete = () => {
     setSelectedOrder(order);
   };
 
-  // console.log("AllOrders", allOrders.length - 1);
+  console.log("AllOrders", allOrders);
 
   useEffect(() => {
     getOrderDetails();
@@ -43,7 +41,7 @@ const OrderComplete = () => {
               <div
                 key={order.orderId}
                 className={`${
-                  index === allOrders.length - 1
+                  index === allOrders?.length - 1
                     ? "bg-green-100 border-l-4 border-green-500"
                     : ""
                 } p-5 rounded-md shadow-md mb-6`}

@@ -25,12 +25,12 @@ const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       {
-        path: "/",
-        element: <Shop />,
-      },
-      {
         element: <ProtectedRoutes />,
         children: [
+          {
+            path: "/",
+            element: <Shop />,
+          },
           {
             path: `/cart`,
             element: <Cart />,

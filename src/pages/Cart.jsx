@@ -9,6 +9,7 @@ const Cart = () => {
   const [userId, setUserId] = useState(null); // State for user ID
   const navigate = useNavigate();
   const cartItem = useSelector((state) => state.cartSlice.cart);
+  // console.log("object");
 
   // Calculate total and extra charges
   const total = cartItem.reduce(
@@ -86,12 +87,11 @@ const Cart = () => {
 
   const handleBuyNow = () => {
     navigate("/checkout");
-    
   };
 
   return (
-    <div className="min-h-[700px]">
-      <h1 className="text-3xl font-bold text-black text-start">Cart</h1>
+    <div className="">
+      <h1 className="text-3xl font-semibold text-black text-center text-blue-600">Cart</h1>
       {cartItem.length > 0
         ? cartItem.map((cartData, index) => {
             return (

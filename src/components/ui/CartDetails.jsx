@@ -8,8 +8,7 @@ import {
   deleteItemToCart,
   increaseItemQuantity,
 } from "../../redux/cartSlice";
-// import { TbAxe } from "react-icons/tb";
-// import OrderComplete from "../components/ui/OrderComplete";
+
 
 const CartDetails = ({ cartData, index }) => {
   const dispatch = useDispatch();
@@ -21,7 +20,6 @@ const CartDetails = ({ cartData, index }) => {
       <div className="font-sans md:max-w-full max-md:max-w-xl mx-auto bg-white py-4">
         <div className="md:col-span-2 bg-gray-100 p-4 rounded-md ">
           <hr className="border-gray-300 mt-2 mb-4" />
-
           <div className="space-y-1 flex gap-4">
             <div className="w-24 h-24 shrink-0 bg-white p-2 rounded-md">
               <img

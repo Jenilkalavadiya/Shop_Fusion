@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,69 +7,79 @@ import { authentication } from "../../redux/userSlice";
 const Header = () => {
   const cartItem = useSelector((state) => state.cartSlice.cart);
   const user = useSelector((state) => state.userSlice.login);
-  const [items, setItems] = useState(cartItem);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogOut = () => {
-    localStorage.removeItem("loggedin");
-    setItems([]);
-    localStorage.removeItem("isActive");
-    localStorage.removeItem("UserDetail");
+    localStorage.clear();
     dispatch(authentication(true));
     navigate("/Loginpage");
   };
 
   const currentUser = JSON.parse(localStorage.getItem("UserDetail"));
-  // const user = useSelector((state)=>{state.us})
-  // console.log("currUserData", currentUser.name);
+
   return (
-    <div className="header-container w-screen fixed">
-      <div className="navbar h-[80px] shadow-lg bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 text-white flex justify-between items-center p-9">
-        <div className="logo">
-          <NavLink className="text-3xl" to="/">
+    <div className="header-container w-full sticky top-0 z-50 bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
+      <div className="navbar h-[80px] flex justify-between items-center p-4 md:p-6 shadow-xl text-white">
+      
+        <div className="logo flex flex-col justify-center">
+          <NavLink
+            className="text-3xl font-bold hover:text-yellow-400 transition-all"
+            to="/"
+          >
             Shop Fusion
           </NavLink>
-          <pre className="text-sm">Customer satisfaction is our moto</pre>
+          <p className="text-sm mt-1 hidden md:block">
+            Customer satisfaction is our motto
+          </p>
         </div>
-        <ul>
-          <div className="links flex justify-center items-center gap-10">
-            <li>
-              <NavLink to="/" className="text-xl">
-                Shop
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/about" className="text-xl">
-                About
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/contact" className="text-xl">
-                Contact
-              </NavLink>
-            </li>
-          </div>
-        </ul>
-        <div className="btn flex justify-center items-center gap-10">
-          {user ? (
-            <>
-              <NavLink to="/cart" className="text-2xl relative">
-                <p className="bg-slate-200 text-center rounded-full absolute text-sm text-black right-[-16px] top-[-9px] left-[12px] w-4 h-4">
-                  {cartItem.length}
-                </p>
-                <FaShoppingCart />
-              </NavLink>
-            </>
-          ) : (
-            ""
+
+        <div className="links flex gap-10 hidden md:flex">
+          <NavLink
+            to="/"
+            className="text-xl hover:text-yellow-400 transition-colors duration-200"
+          >
+            Shop
+          </NavLink>
+          <NavLink
+            to="/about"
+            className="text-xl hover:text-yellow-400 transition-colors duration-200"
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className="text-xl hover:text-yellow-400 transition-colors duration-200"
+          >
+            Contact
+          </NavLink>
+        </div>
+
+     
+        <div className="md:hidden flex items-center gap-4">
+          <button className="text-2xl hover:text-yellow-400 transition-all">
+            <FaShoppingCart />
+          </button>
+        </div>
+
+       
+        <div className="btn flex items-center gap-10">
+          {user && (
+            <NavLink to="/cart" className="relative text-2xl">
+              <p className="absolute bg-red-500 text-xs rounded-full text-white px-2 py-1 top-[-8px] right-[-12px]">
+                {cartItem.length}
+              </p>
+              <FaShoppingCart className="hover:text-yellow-400 transition-all" />
+            </NavLink>
           )}
 
-          <div className="menu">
+        
+          <div className="relative">
             <select
               name="menu"
               id="menu"
-              className="bg-slate-900"
+              className="bg-gray-800 text-white py-2 px-4 rounded-lg outline-none cursor-pointer hover:bg-gray-700 transition-all"
+              value={user ? currentUser.name : ""}
               onChange={(e) => {
                 if (e.target.value === "orderComplete") {
                   navigate("/orderComplete");
@@ -78,25 +88,13 @@ const Header = () => {
                   navigate("/");
                 }
                 if (e.target.value === "logout") {
-                  // navigate("/Loginpage");
                   handleLogOut();
-                  localStorage.removeItem("cartItem");
                 }
               }}
             >
-              <option value="user">
-                <span className="text-xl font-bold bg-slate-200 p-2 rounded-full text-black">
-                  {user ? currentUser.name : "Please Login"}
-                </span>
-              </option>
-
-              {user ? <option value="orderComplete">Your Orders</option> : ""}
-
-              <option value="logout">
-                <NavLink onClick={handleLogOut}>
-                  {user ? "LogOut" : "Login"}
-                </NavLink>
-              </option>
+              <option value="">{user ? currentUser.name : "Login"}</option>
+              {user && <option value="orderComplete">Your Orders</option>}
+              <option value="logout">{user ? "LogOut" : "Login"}</option>
             </select>
           </div>
         </div>

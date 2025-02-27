@@ -10,7 +10,6 @@ const Signup = (values) => {
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
-  
     const validUser = user.some((data) => data.email === values.email);
     // console.log("Validate", validUser);
     try {
@@ -28,22 +27,18 @@ const Signup = (values) => {
     }
   };
 
-  // Get request to validate user
-
   const getAllUser = async (values) => {
     const res = await axios.get("http://localhost:3002/user", values);
-    // console.log("result", res);
+
     setUser(res.data);
   };
-
-  // console.log("first", user);
 
   useEffect(() => {
     getAllUser();
   }, []);
 
   return (
-    <div className="flex justify-center min-h-[800px]">
+    <div className="flex justify-center min-h-[850px]">
       <div className="font-[sans-serif] bg-white max-w-7xl flex items-center justify-center p-2">
         <div className="grid md:grid-cols-3 items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-xl overflow-hidden">
           <div className="max-md:order-1 flex flex-col justify-center md:space-y-16 space-y-8 max-md:mt-16 min-h-full bg-gradient-to-r from-gray-900 to-gray-700 lg:px-8 px-4 py-4">

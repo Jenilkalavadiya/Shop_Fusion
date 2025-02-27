@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate } from "react-router-dom";
 import { authentication } from "../redux/userSlice";
 import { Field, Form, Formik } from "formik";
@@ -17,6 +17,8 @@ const Loginpage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // const cartItem = useSelector((state) => state.cartSlice.cart);
+  // console.log("CArt", cartItem);
 
   const getAllUser = async (values) => {
     // console.log("response", values);
@@ -44,6 +46,7 @@ const Loginpage = () => {
         toast.success("Login Successfull");
         localStorage.setItem("isActive", JSON.stringify(currData.id));
         localStorage.setItem("UserDetail", JSON.stringify(currData));
+        // localStorage.setItem("cartItem", JSON.stringify(currData.));
         dispatch(authentication(true));
         navigate("/");
         userFound = true;
@@ -57,7 +60,7 @@ const Loginpage = () => {
 
   return (
     <div className="font-[sans-serif]">
-      <div className="min-h-[750px] flex flex-col items-center justify-center py-6 px-4">
+      <div className="min-h-[850px] flex flex-col items-center justify-center py-6 px-4">
         <div className="grid md:grid-cols-2 items-center gap-5 max-w-6xl max-md:max-w-md w-full">
           <div>
             <h2 className="lg:text-5xl text-3xl font-extrabold lg:leading-[55px] text-gray-800">
