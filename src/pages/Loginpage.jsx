@@ -10,6 +10,8 @@ import axios from "axios";
 
 const Loginpage = () => {
   const [loggedUser, setLoggedUser] = useState([]);
+  const [change, setChange] = useState(null);
+
   const initialValues = {
     email: "",
     password: "",
@@ -17,8 +19,6 @@ const Loginpage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const cartItem = useSelector((state) => state.cartSlice.cart);
-  // console.log("CArt", cartItem);
 
   const getAllUser = async (values) => {
     // console.log("response", values);
@@ -35,7 +35,6 @@ const Loginpage = () => {
 
   const handleLogin = (values) => {
     let userFound = false;
-
     // eslint-disable-next-line array-callback-return
     loggedUser.map((currData) => {
       if (
@@ -48,13 +47,112 @@ const Loginpage = () => {
         localStorage.setItem("UserDetail", JSON.stringify(currData));
         // localStorage.setItem("cartItem", JSON.stringify(currData.));
         dispatch(authentication(true));
+        getCartItems();
+        updateServer();
         navigate("/");
         userFound = true;
       }
-      // localStorage.setItem("LoggedID", currData.id);
     });
     if (!userFound) {
       toast.error("Invalid Email or Password");
+    }
+  };
+  const userID = JSON.parse(localStorage.getItem("isActive"));
+
+  const cartItem = useSelector((state) => state.cartSlice.cart);
+
+  const getCartItems = async () => {
+    if (!userID) {
+      console.error("No userID found in localStorage. Please login again.");
+      return;
+    }
+    console.log("Fetching cart items for userID:", userID);
+    try {
+      const res = await axios.get(
+        `http://localhost:3002/order?userID=${userID}`,
+        userID
+      );
+      if (res.data.length > 0) {
+        console.log("PPPPPPP", res.data);
+        const cartItem = res.data[0].cartItem;
+        console.log("RESSS", cartItem);
+        console.log("Cart Items fetched", cartItem);
+      } else {
+        console.log("No cart items found for userID:", userID);
+      }
+    } catch (error) {
+      console.error("Error fetching cart items:", error);
+    }
+  };
+
+  const updateServer = async () => {
+    try {
+      // Find the existing cart item for the user
+      const existingItem = change.find(
+        (item) => item.userId === userID // Check the userId to find the correct cart
+      );
+
+      console.log("existingItem", existingItem);
+
+      if (existingItem) {
+        // If the item already exists, check if the product is already in the cart
+        const existingProduct = existingItem.product.find(
+          (item) => item.id === cartItem.id // Check if the product already exists
+        );
+
+        if (existingProduct) {
+          // If the product already exists, just update the quantity
+          existingProduct.quantity += 1;
+
+          // Send a PUT request to update the product quantity on the server
+          await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
+            ...existingItem,
+            product: [...existingItem.product], // Ensure we're sending the updated array
+          });
+
+          // Update the local state to reflect the change
+          setChange((prevState) =>
+            prevState.map((item) =>
+              item.id === existingItem.id
+                ? { ...item, product: [...item.product] }
+                : item
+            )
+          );
+          toast.success("Product quantity updated in cart");
+        } else {
+          // If the product doesn't exist in the cart, add it to the product array
+          existingItem.product.push({ ...cartItem, quantity: 1 });
+
+          // Send a PUT request to update the product array on the server
+          await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
+            ...existingItem,
+            product: [...existingItem.product],
+          });
+
+          // Update the local state to reflect the new product addition
+          setChange((prevState) =>
+            prevState.map((item) =>
+              item.id === existingItem.id
+                ? { ...item, product: [...item.product] }
+                : item
+            )
+          );
+          toast.success("Product added to cart");
+        }
+      } else {
+        const res = await axios.post("http://localhost:3004/cart", {
+          userId: userID,
+          product: [{ ...cartItem, quantity: 1 }],
+        });
+
+        console.log("postData", res.data);
+        toast.success("Product added to cart");
+
+        // Update the local state with the new cart item
+        setChange((prevState) => [...prevState, res.data]);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

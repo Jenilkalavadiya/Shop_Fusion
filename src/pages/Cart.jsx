@@ -30,31 +30,31 @@ const Cart = () => {
     }
   };
 
-  const setCartItems = async () => {
-    if (userId) {
-      try {
-        const existingOrderResponse = await axios.get(
-          `http://localhost:3002/order?userId=${userId}`
-        );
-        if (existingOrderResponse.data.length > 0) {
-          // Update the existing order if it exists
-          const order = existingOrderResponse.data[0];
-          const updatedOrder = { ...order, cartItem: cartItem };
-          await axios.put(
-            `http://localhost:3002/order/${order.id}`,
-            updatedOrder
-          );
-        } else {
-          await axios.post("http://localhost:3002/order", {
-            userId: userId,
-            cartItem: cartItem,
-          });
-        }
-      } catch (error) {
-        console.error("Error saving cart data:", error);
-      }
-    }
-  };
+  // const setCartItems = async () => {
+  //   if (userId) {
+  //     try {
+  //       const existingOrderResponse = await axios.get(
+  //         `http://localhost:3002/order?userId=${userId}`
+  //       );
+  //       if (existingOrderResponse.data.length > 0) {
+  //         // Update the existing order if it exists
+  //         const order = existingOrderResponse.data[0];
+  //         const updatedOrder = { ...order, cartItem: cartItem };
+  //         await axios.put(
+  //           `http://localhost:3002/order/${order.id}`,
+  //           updatedOrder
+  //         );
+  //       } else {
+  //         await axios.post("http://localhost:3002/order", {
+  //           userId: userId,
+  //           cartItem: cartItem,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error saving cart data:", error);
+  //     }
+  //   }
+  // };
 
   const getCartItems = async (userID) => {
     if (userID) {
@@ -75,11 +75,11 @@ const Cart = () => {
     fetchUserId();
   }, []);
 
-  useEffect(() => {
-    if (userId) {
-      setCartItems();
-    }
-  }, [userId]);
+  // useEffect(() => {
+  //   if (userId) {
+  //     setCartItems();
+  //   }
+  // }, [userId]);
 
   useEffect(() => {
     getCartItems(userId);

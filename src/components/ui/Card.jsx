@@ -7,7 +7,7 @@ const Card = ({ item }) => {
   const id = localStorage.getItem("isActive");
 
   return (
-    <div className="bg-white shadow-lg rounded-xl overflow-hidden mx-auto mt-6 max-w-[350px] max-h-[650px] p-6">
+    <div className="bg-white shadow-lg rounded-xl overflow-hidden mx-auto max-w-[350px] max-h-[650px] p-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-xl font-semibold text-gray-800 truncate max-w-[230px]">
           {title.slice(0, 20)}
