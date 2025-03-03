@@ -47,7 +47,7 @@ const Loginpage = () => {
         localStorage.setItem("UserDetail", JSON.stringify(currData));
         // localStorage.setItem("cartItem", JSON.stringify(currData.));
         dispatch(authentication(true));
-        getCartItems();
+        // getCartItems();
         updateServer();
         navigate("/");
         userFound = true;
@@ -60,30 +60,6 @@ const Loginpage = () => {
   const userID = JSON.parse(localStorage.getItem("isActive"));
 
   const cartItem = useSelector((state) => state.cartSlice.cart);
-
-  const getCartItems = async () => {
-    if (!userID) {
-      console.error("No userID found in localStorage. Please login again.");
-      return;
-    }
-    console.log("Fetching cart items for userID:", userID);
-    try {
-      const res = await axios.get(
-        `http://localhost:3002/order?userID=${userID}`,
-        userID
-      );
-      if (res.data.length > 0) {
-        console.log("PPPPPPP", res.data);
-        const cartItem = res.data[0].cartItem;
-        console.log("RESSS", cartItem);
-        console.log("Cart Items fetched", cartItem);
-      } else {
-        console.log("No cart items found for userID:", userID);
-      }
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-    }
-  };
 
   const updateServer = async () => {
     try {
@@ -141,7 +117,7 @@ const Loginpage = () => {
         }
       } else {
         const res = await axios.post("http://localhost:3004/cart", {
-          userId: userID,
+          userID: userID,
           product: [{ ...cartItem, quantity: 1 }],
         });
 

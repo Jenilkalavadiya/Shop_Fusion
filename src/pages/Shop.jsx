@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "../components/ui/Card";
 import Spinner from "../components/ui/Spinner/Spinner";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { setCartItems } from "../redux/cartSlice";
 
 const Shop = () => {
+  const [items, setItems] = useState([]);
   const [apidata, setapiData] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -14,12 +17,63 @@ const Shop = () => {
     setapiData(data);
     setLoading(false);
   };
+  const dispatch = useDispatch();
 
   const cartItem = useSelector((state) => state.cartSlice.cart);
-  // console.log("BBBBBBB", userID);
 
+  const userID = localStorage.getItem("isActive");
+  //   if (!userID) {
+  //     console.error("No userID found in localStorage. Please login again.");
+  //     return;
+  //   }
+  //   console.log("Fetching cart items for userID:", userID);
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:3002/order?userID=${userID}`,
+  //       userID
+  //     );
+  //     if (res.data.length > 0) {
+  //       console.log("PPPPPPP", res.data);
+  //       const cartItem = res.data[0].cartItem;
+  //       console.log("RESSS", cartItem);
+  //       console.log("Cart Items fetched", cartItem);
+  //       dispatch(setCartItems(cartItem));
+  //     } else {
+  //       console.log("No cart items found for userID:", userID);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching cart items:", error);
+  //   }
+  // };
+
+  const getCartItems = async () => {
+    if (userID) {
+      try {
+        const response = await axios.get(
+          `http://localhost:3002/order?userID=${userID}`
+        );
+        // Check if response.data is empty or if cartItem is missing
+        if (
+          response.data &&
+          response.data.length > 0 &&
+          response.data[0].cartItem
+        ) {
+          console.log("Cart items found:", response.data[0].cartItem);
+          dispatch(setCartItems(response.data[0].cartItem));
+          setItems(response.data[0].cartItem);
+        } else {
+          console.log("No cart items found for this user.");
+          dispatch(setCartItems([])); // Ensure Redux state is updated with an empty array
+          setItems([]); // Set local state to an empty array
+        }
+      } catch (error) {
+        console.error("Error fetching cart data:", error);
+      }
+    }
+  };
   useEffect(() => {
     fetchData();
+    getCartItems();
   }, []);
 
   if (cartItem.length >= 0) {

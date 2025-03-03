@@ -38,7 +38,7 @@ const Checkform = () => {
       if (res.status === 201) {
         navigate("/ordercomplete");
         dispatch(clearCart());
-        localStorage.removeItem("cartItem");
+        // localStorage.removeItem("cartItem");
       }
     } catch (error) {
       console.log(error);
@@ -50,7 +50,7 @@ const Checkform = () => {
   };
 
   const cartItem = JSON.parse(localStorage.getItem("cartItem"));
-  const userID = JSON.parse(localStorage.getItem("isActive"));
+  // const userID = JSON.parse(localStorage.getItem("isActive"));
 
   const handleCancelClick = () => {
     navigate("/cart");

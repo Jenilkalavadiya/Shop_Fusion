@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartDetails from "../components/ui/CartDetails";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { setCartItems } from "../redux/cartSlice";
 
 const Cart = () => {
-  const [items, setItems] = useState([]);
-  const [userId, setUserId] = useState(null); // State for user ID
+  // const [cartdata, setCartData] = useState([]);
+  // const [userId, setUserId] = useState(null); // State for user ID
   const navigate = useNavigate();
   const cartItem = useSelector((state) => state.cartSlice.cart);
-  // console.log("object");
+  console.log("AOOOOOOO", cartItem);
 
-  // Calculate total and extra charges
+  const handleBuyNow = () => {
+    navigate("/checkout");
+  };
+
+  const dispatch = useDispatch();
+  dispatch(setCartItems(cartItem));
+  // setCartData(cartItem);
   const total = cartItem.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
@@ -21,77 +27,9 @@ const Cart = () => {
     shipping: 10,
     Tax: parseInt((total * 18) / 100),
   };
-
-  const fetchUserId = async () => {
-    const id = JSON.parse(localStorage.getItem("isActive"));
-    // console.log("FetchID", id);
-    if (id) {
-      setUserId(id);
-    }
-  };
-
-  // const setCartItems = async () => {
-  //   if (userId) {
-  //     try {
-  //       const existingOrderResponse = await axios.get(
-  //         `http://localhost:3002/order?userId=${userId}`
-  //       );
-  //       if (existingOrderResponse.data.length > 0) {
-  //         // Update the existing order if it exists
-  //         const order = existingOrderResponse.data[0];
-  //         const updatedOrder = { ...order, cartItem: cartItem };
-  //         await axios.put(
-  //           `http://localhost:3002/order/${order.id}`,
-  //           updatedOrder
-  //         );
-  //       } else {
-  //         await axios.post("http://localhost:3002/order", {
-  //           userId: userId,
-  //           cartItem: cartItem,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error saving cart data:", error);
-  //     }
-  //   }
-  // };
-
-  const getCartItems = async (userID) => {
-    if (userID) {
-      try {
-        const response = await axios.get(
-          `http://localhost:3002/order?userId=${userID}`
-        );
-        console.log("response", response.data);
-        // Update the state with the fetched cart items
-        setItems(response.data[0]?.cartItem || []);
-      } catch (error) {
-        console.error("Error fetching cart data:", error);
-      }
-    }
-  };
-
-  useEffect(() => {
-    fetchUserId();
-  }, []);
-
-  // useEffect(() => {
-  //   if (userId) {
-  //     setCartItems();
-  //   }
-  // }, [userId]);
-
-  useEffect(() => {
-    getCartItems(userId);
-  }, [userId]);
-
-  const handleBuyNow = () => {
-    navigate("/checkout");
-  };
-
   return (
     <div className="">
-      <h1 className="text-3xl font-semibold text-black text-center text-blue-600">Cart</h1>
+      <h1 className="text-3xl font-semibold text-black text-center">Cart</h1>
       {cartItem.length > 0
         ? cartItem.map((cartData, index) => {
             return (

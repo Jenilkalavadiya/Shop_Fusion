@@ -1,10 +1,12 @@
 import { useDispatch } from "react-redux";
 import { addItemToCart } from "../../redux/cartSlice";
 
-const Card = ({ item }) => {
+const Card = ({ item}) => {
+  // console.log("AAAAAAAAAAAAAAAAAAAAAYAHAAA", items);
   const dispatch = useDispatch();
   const { title, price, description, image, rating } = item;
   const id = localStorage.getItem("isActive");
+  // console.log("YAAAAAAAAAAAAAAAAAAAAAAAAAAho", item);
 
   return (
     <div className="bg-white shadow-lg rounded-xl overflow-hidden mx-auto max-w-[350px] max-h-[650px] p-6">

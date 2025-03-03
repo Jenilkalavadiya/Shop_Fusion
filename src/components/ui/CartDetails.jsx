@@ -2,7 +2,7 @@ import React from "react";
 import { IoMdAdd } from "react-icons/io";
 import { RiSubtractLine } from "react-icons/ri";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   decreaseItemQuantity,
   deleteItemToCart,
@@ -14,6 +14,8 @@ const CartDetails = ({ cartData, index }) => {
   const dispatch = useDispatch();
   const { title, price, description, image, category, id, quantity } = cartData;
 
+  // const {cartItem} = useSelector((state)=>state.)
+  
 
   return (
     <>
