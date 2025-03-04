@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { authentication } from "../../redux/userSlice";
-import axios from "axios";
+// import axios from "axios";
 
 const Header = () => {
   const cartItem = useSelector((state) => state.cartSlice.cart);
@@ -11,37 +11,8 @@ const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userID = JSON.parse(localStorage.getItem("isActive"));
-  // const cartItem = useSelector((state) => state.cartSlice.cart);
-  const setCartItems = async () => {
-    if (userID) {
-      try {
-        const existingOrderResponse = await axios.get(
-          `http://localhost:3002/order?userID=${userID}`
-        );
-        if (existingOrderResponse.data.length > 0) {
-          // Update the existing order if it exists
-          const order = existingOrderResponse.data[0];
-          const updatedOrder = { ...order, cartItem: cartItem };
-          await axios.put(
-            `http://localhost:3002/order/${order.id}`,
-            updatedOrder
-          );
-        } else {
-          await axios.post("http://localhost:3002/order", {
-            userID: userID,
-            cartItem: cartItem,
-          });
-        }
-      } catch (error) {
-        console.error("Error saving cart data:", error);
-      }
-    }
-  };
-
   const handleLogOut = () => {
     localStorage.clear();
-    setCartItems();
     dispatch(authentication(true));
     navigate("/Loginpage");
   };

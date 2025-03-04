@@ -9,7 +9,7 @@ const Cart = () => {
   // const [userId, setUserId] = useState(null); // State for user ID
   const navigate = useNavigate();
   const cartItem = useSelector((state) => state.cartSlice.cart);
-  console.log("AOOOOOOO", cartItem);
+ 
 
   const handleBuyNow = () => {
     navigate("/checkout");

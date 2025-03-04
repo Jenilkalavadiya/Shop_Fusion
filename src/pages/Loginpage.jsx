@@ -45,10 +45,8 @@ const Loginpage = () => {
         toast.success("Login Successfull");
         localStorage.setItem("isActive", JSON.stringify(currData.id));
         localStorage.setItem("UserDetail", JSON.stringify(currData));
-        // localStorage.setItem("cartItem", JSON.stringify(currData.));
         dispatch(authentication(true));
-        // getCartItems();
-        updateServer();
+        // updateServer();
         navigate("/");
         userFound = true;
       }
@@ -57,80 +55,80 @@ const Loginpage = () => {
       toast.error("Invalid Email or Password");
     }
   };
-  const userID = JSON.parse(localStorage.getItem("isActive"));
+  // const userID = JSON.parse(localStorage.getItem("isActive"));
 
-  const cartItem = useSelector((state) => state.cartSlice.cart);
+  // const cartItem = useSelector((state) => state.cartSlice.cart);
 
-  const updateServer = async () => {
-    try {
-      // Find the existing cart item for the user
-      const existingItem = change.find(
-        (item) => item.userId === userID // Check the userId to find the correct cart
-      );
+  // const updateServer = async () => {
+  //   try {
+  //     // Find the existing cart item for the user
+  //     const existingItem = change.find(
+  //       (item) => item.userId === userID // Check the userId to find the correct cart
+  //     );
 
-      console.log("existingItem", existingItem);
+  //     console.log("existingItem", existingItem);
 
-      if (existingItem) {
-        // If the item already exists, check if the product is already in the cart
-        const existingProduct = existingItem.product.find(
-          (item) => item.id === cartItem.id // Check if the product already exists
-        );
+  //     if (existingItem) {
+  //       // If the item already exists, check if the product is already in the cart
+  //       const existingProduct = existingItem.product.find(
+  //         (item) => item.id === cartItem.id // Check if the product already exists
+  //       );
 
-        if (existingProduct) {
-          // If the product already exists, just update the quantity
-          existingProduct.quantity += 1;
+  //       if (existingProduct) {
+  //         // If the product already exists, just update the quantity
+  //         existingProduct.quantity += 1;
 
-          // Send a PUT request to update the product quantity on the server
-          await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
-            ...existingItem,
-            product: [...existingItem.product], // Ensure we're sending the updated array
-          });
+  //         // Send a PUT request to update the product quantity on the server
+  //         await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
+  //           ...existingItem,
+  //           product: [...existingItem.product], // Ensure we're sending the updated array
+  //         });
 
-          // Update the local state to reflect the change
-          setChange((prevState) =>
-            prevState.map((item) =>
-              item.id === existingItem.id
-                ? { ...item, product: [...item.product] }
-                : item
-            )
-          );
-          toast.success("Product quantity updated in cart");
-        } else {
-          // If the product doesn't exist in the cart, add it to the product array
-          existingItem.product.push({ ...cartItem, quantity: 1 });
+  //         // Update the local state to reflect the change
+  //         setChange((prevState) =>
+  //           prevState.map((item) =>
+  //             item.id === existingItem.id
+  //               ? { ...item, product: [...item.product] }
+  //               : item
+  //           )
+  //         );
+  //         toast.success("Product quantity updated in cart");
+  //       } else {
+  //         // If the product doesn't exist in the cart, add it to the product array
+  //         existingItem.product.push({ ...cartItem, quantity: 1 });
 
-          // Send a PUT request to update the product array on the server
-          await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
-            ...existingItem,
-            product: [...existingItem.product],
-          });
+  //         // Send a PUT request to update the product array on the server
+  //         await axios.put(`http://localhost:3004/cart/${existingItem.id}`, {
+  //           ...existingItem,
+  //           product: [...existingItem.product],
+  //         });
 
-          // Update the local state to reflect the new product addition
-          setChange((prevState) =>
-            prevState.map((item) =>
-              item.id === existingItem.id
-                ? { ...item, product: [...item.product] }
-                : item
-            )
-          );
-          toast.success("Product added to cart");
-        }
-      } else {
-        const res = await axios.post("http://localhost:3004/cart", {
-          userID: userID,
-          product: [{ ...cartItem, quantity: 1 }],
-        });
+  //         // Update the local state to reflect the new product addition
+  //         setChange((prevState) =>
+  //           prevState.map((item) =>
+  //             item.id === existingItem.id
+  //               ? { ...item, product: [...item.product] }
+  //               : item
+  //           )
+  //         );
+  //         toast.success("Product added to cart");
+  //       }
+  //     } else {
+  //       const res = await axios.post("http://localhost:3004/cart", {
+  //         userID: userID,
+  //         product: [{ ...cartItem, quantity: 1 }],
+  //       });
 
-        console.log("postData", res.data);
-        toast.success("Product added to cart");
+  //       console.log("postData", res.data);
+  //       toast.success("Product added to cart");
 
-        // Update the local state with the new cart item
-        setChange((prevState) => [...prevState, res.data]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //       // Update the local state with the new cart item
+  //       setChange((prevState) => [...prevState, res.data]);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   return (
     <div className="font-[sans-serif]">
