@@ -9,14 +9,13 @@ const Cart = () => {
   // const [userId, setUserId] = useState(null); // State for user ID
   const navigate = useNavigate();
   const cartItem = useSelector((state) => state.cartSlice.cart);
- 
-
+  console.log("CartItems", cartItem);
   const handleBuyNow = () => {
     navigate("/checkout");
   };
 
-  const dispatch = useDispatch();
-  dispatch(setCartItems(cartItem));
+  // const dispatch = useDispatch();
+  // dispatch(setCartItems(cartItem));
   // setCartData(cartItem);
   const total = cartItem.reduce(
     (acc, item) => acc + item.price * item.quantity,

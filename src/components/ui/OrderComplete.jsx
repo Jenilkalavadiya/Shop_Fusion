@@ -26,6 +26,12 @@ const OrderComplete = () => {
     getOrderDetails();
   }, []);
 
+  const reverseArray = (allOrders) => {
+    return allOrders.slice().reverse();
+  };
+
+  const reversedArray = reverseArray(allOrders);
+  console.log("Reversed", reversedArray);
   return (
     <>
       <div className="flex flex-col items-center w-screen py-10 bg-gray-50">
@@ -37,11 +43,11 @@ const OrderComplete = () => {
         {/* Current Order Section */}
         <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md mb-10">
           <div className="main-container flex flex-col gap-10">
-            {allOrders.map((order, index) => (
+            {reversedArray.map((order, index) => (
               <div
                 key={order.orderId}
                 className={`${
-                  index === allOrders?.length - 1
+                  index === reversedArray?.length - reversedArray.length
                     ? "bg-green-100 border-l-4 border-green-500"
                     : ""
                 } p-5 rounded-md shadow-md mb-6`}

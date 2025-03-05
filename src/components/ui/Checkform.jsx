@@ -3,7 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../../redux/cartSlice";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-// import * as Yup from "yup";
+
 import { checkoutvalidation } from "../../schemas/checkoutvalidation";
 
 const Checkform = () => {

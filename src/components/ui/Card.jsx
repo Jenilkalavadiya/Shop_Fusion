@@ -1,171 +1,122 @@
-import { useDispatch, useSelector } from "react-redux";
-import { addItemToCart, setCartItems } from "../../redux/cartSlice";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useFetchData from "../useFetchData";
-import { Navigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Card = ({ product }) => {
-  // const [change, setChange] = useState(null);
-  // console.log("change", change);
-  const dispatch = useDispatch();
+  const [change, setChange] = useState([]);
   const { title, price, description, image, rating } = product;
   const userID = JSON.parse(localStorage.getItem("UserDetail"));
-  console.log("USERID", userID.id);
+  // console.log("USERID", userID.id);
 
-  const handleOrderNow = (product) => {
-    // dispatch(addItemToCart(item));
-    setCartItems();
-  };
-  const { change, setChange } = useFetchData(userID);
-
-  const setCartItems = async () => {
+  const getData = async () => {
     try {
-      // Find the existing cart item for the user
-      const existingItem = change.find(
-        (item) => item.userId === userID.id // Check the userId to find the correct cart
+      const res = await axios.get(
+        `http://localhost:3002/order?userID=${userID.id}`,
+        userID
       );
-
-      console.log("existingItem", existingItem);
-
-      if (existingItem) {
-        // If the item already exists, check if the product is already in the cart
-        const existingProduct = existingItem.product.find(
-          (item) => item.id === product.id // Check if the product already exists
-        );
-
-        if (existingProduct) {
-          const updatedProduct = {
-            ...existingProduct,
-            quantity: existingProduct.quantity + 1,
-          };
-
-          // Create a new product array with the updated product
-          const updatedProducts = existingItem.product.map((item) =>
-            item.id === product.id ? updatedProduct : item
-          );
-
-          console.log("existingProduct", existingProduct);
-
-          // Send a PUT request to update the product quantity on the server
-          await axios.put(`http://localhost:3002/order/${existingItem.id}`, {
-            ...existingItem,
-            product: updatedProducts, // Ensure we're sending the updated array
-          });
-
-          // Update the local state to reflect the change
-          setChange((prevState) =>
-            prevState.map((item) =>
-              item.id === existingItem.id
-                ? { ...item, product: updatedProducts }
-                : item
-            )
-          );
-          toast.success("Product quantity updated in cart");
-        } else {
-          // If the product doesn't exist in the cart, add it to the product array
-          const updatedProducts = [
-            ...existingItem.product,
-            { ...product, quantity: 1 },
-          ];
-
-          // Send a PUT request to update the product array on the server
-          await axios.put(`http://localhost:3002/order/${existingItem.id}`, {
-            ...existingItem,
-            product: updatedProducts, // Ensure we're sending the updated array
-          });
-
-          // Update the local state to reflect the new product addition
-          setChange((prevState) =>
-            prevState.map((item) =>
-              item.id === existingItem.id
-                ? { ...item, product: updatedProducts }
-                : item
-            )
-          );
-          // Navigate("/cart");
-          toast.success("Product added to cart");
-        }
-      } else {
-        // If the user doesn't have any cart, create a new entry with the first product
-        const res = await axios.post("http://localhost:3002/order", {
-          userId: userID.id,
-          product: [{ ...product, quantity: 1 }],
-        });
-
-        console.log("postData", res.data);
-        toast.success("Product added to cart");
-
-        // Update the local state with the new cart item
-        setChange((prevState) => [...prevState, res.data]);
-      }
+      console.log("GETDATA", res.data);
+      setChange(res.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // const setCartItems = async () => {
-  //   try {
-  //     const res = await axios.post(`http://localhost:3002/order`, {
-  //       userID: userID.id,
-  //       cartItem: [{...item,quantity:1}],
-  //     });
-  //     if(userID.id)
-  //     console.log("Response:", res.data);
-  //   } catch (error) {
-  //     console.error(
-  //       "Error posting cart items:",
-  //       error.response ? error.response.data : error.message
-  //     );
-  //   }
-  // };
+  useEffect(() => {
+    getData();
+  }, []);
 
-  // const getData = async () => {
+  // const setCartItems = async () => {
+  //   const tempProduct = [];
   //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:3002/order?userID=${userID}`
-  //     );
-  //     setChange(response.data);
+  //     console.log("change", change);
+
+  //     const existingUserCart = change.find((item) => item.userID === userID.id);
+  //     console.log("existingUser", existingUserCart);
+
+  //     if (existingUserCart) {
+  //       console.log("matching user found.");
+
+  //       const existingProduct = existingUserCart.product.find(
+  //         (item) => item.id === product.id
+  //       );
+
+  //       if (existingProduct) {
+  //         const newQuantity = existingProduct.quantity + 1;
+  //         tempProduct = {
+  //           ...existingProduct,
+  //           quantity: newQuantity,
+  //         };
+  //       }
+  //       console.log("Temp", tempProduct);
+  //     } else {
+  //       console.log("No matching user found.");
+  //       const newItem = tempProduct.push(product);
+  //       console.log("NEWCART", newItem);
+  //       console.log("Temp111", tempProduct);
+  //       setChange(tempProduct);
+  //       const response = await axios.post("http://localhost:3002/order", {
+  //         userID: userID.id,
+  //         product: tempProduct,
+  //       });
+  //       console.log("SETRES", response.data);
+  //     }
   //   } catch (error) {
   //     console.log(error);
   //   }
   // };
 
-  // useEffect(() => {
-  //   if (userID) {
-  //     getData();
-  //   }
-  // }, []);
+  const setCartItems = async () => {
+    try {
+      const existingUserCart = change.find((item) => item.userID === userID.id);
+      const tempProduct = [...change];
+      console.log("tempProduct", tempProduct);
 
-  //   const setCartItems = async () => {
-  //     if (userID) {
-  //       try {
-  //         const existingOrderResponse = await axios.get(
-  //           `http://localhost:3002/order?userID=${userID}`
-  //         );
-  //         console.log("existingOrderResponse", existingOrderResponse);
-  //         if (existingOrderResponse?.data[0]?.length > 0) {
-  //           const order = existingOrderResponse.data[0];
-  //           const cartItems = order.map((item) => item.item);
-  //           console.log("object", cartItems);
-  //           const updatedOrder = { ...order, cartItem: cartItem };
-  //           await axios.put(
-  //             `http://localhost:3002/order/${order.id}`,
-  //             updatedOrder
-  //           );
-  //         } else {
-  //           await axios.post("http://localhost:3002/order", {
-  //             userID: userID,
-  //             cartItem: item,
-  //           });
-  //         }
-  //       } catch (error) {
-  //         console.error("Error saving cart data:", error);
-  //       }
-  //     }
-  //   //   // console.log("object", item);
-  // };
+      if (existingUserCart) {
+        console.log("matching user found.");
+
+        const existingProduct = existingUserCart.product.find(
+          (item) => item.id === product.id
+        );
+
+        if (existingProduct) {
+          const newQuantity = existingProduct.quantity + 1;
+
+          const updatedProduct = {
+            ...existingProduct,
+            quantity: newQuantity,
+          };
+
+          tempProduct[0].product.push(updatedProduct);
+        } else {
+          tempProduct[0].product.push(product);
+        }
+        console.log("Temp after update:", tempProduct);
+        setChange(tempProduct);
+      } else {
+        console.log("No matching user found.");
+        tempProduct.push(product);
+
+        console.log("Temp after adding new product:", tempProduct);
+
+        const response = await axios.post("http://localhost:3002/order", {
+          userID: userID.id,
+          product: tempProduct,
+        });
+
+        // console.log("SETRES", response.data);
+      }
+      // const response = await axios.post("http://localhost:3002/order", {
+      //   tempProduct,
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleBtn = () => {
+    setCartItems();
+  };
+
   return (
     <div className="bg-white shadow-lg rounded-xl overflow-hidden mx-auto max-w-[350px] max-h-[650px] p-6">
       <div className="flex justify-between items-center mb-4">
@@ -203,7 +154,9 @@ const Card = ({ product }) => {
         <button
           type="button"
           className="px-6 py-2 rounded-lg text-white text-sm font-semibold bg-blue-600 hover:bg-blue-700 transition-colors duration-300 w-full max-w-[220px]"
-          onClick={() => handleOrderNow(product)}
+          onClick={() => {
+            handleBtn();
+          }}
         >
           Order Now
         </button>
