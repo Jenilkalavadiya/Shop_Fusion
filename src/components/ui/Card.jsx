@@ -2,114 +2,66 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
-const Card = ({ product }) => {
-  const [change, setChange] = useState([]);
-  const { title, price, description, image, rating } = product;
-  const userID = JSON.parse(localStorage.getItem("UserDetail"));
-  // console.log("USERID", userID.id);
+const Card = ({ product, change, getData }) => {
+  const { title, price, description, image, rating, id } = product; // Ensure product has an 'id'
+  const userID = JSON.parse(localStorage.getItem("UserDetail"))?.id;
+  console.log("USERID", userID);
 
-  const getData = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3002/order?userID=${userID.id}`,
-        userID
-      );
-      console.log("GETDATA", res.data);
-      setChange(res.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  // const setCartItems = async () => {
-  //   const tempProduct = [];
-  //   try {
-  //     console.log("change", change);
-
-  //     const existingUserCart = change.find((item) => item.userID === userID.id);
-  //     console.log("existingUser", existingUserCart);
-
-  //     if (existingUserCart) {
-  //       console.log("matching user found.");
-
-  //       const existingProduct = existingUserCart.product.find(
-  //         (item) => item.id === product.id
-  //       );
-
-  //       if (existingProduct) {
-  //         const newQuantity = existingProduct.quantity + 1;
-  //         tempProduct = {
-  //           ...existingProduct,
-  //           quantity: newQuantity,
-  //         };
-  //       }
-  //       console.log("Temp", tempProduct);
-  //     } else {
-  //       console.log("No matching user found.");
-  //       const newItem = tempProduct.push(product);
-  //       console.log("NEWCART", newItem);
-  //       console.log("Temp111", tempProduct);
-  //       setChange(tempProduct);
-  //       const response = await axios.post("http://localhost:3002/order", {
-  //         userID: userID.id,
-  //         product: tempProduct,
-  //       });
-  //       console.log("SETRES", response.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
+  // Add or update product in cart
   const setCartItems = async () => {
     try {
-      const existingUserCart = change.find((item) => item.userID === userID.id);
-      const tempProduct = [...change];
-      console.log("tempProduct", tempProduct);
+      // Find the user's existing cart
+      const existingUserCart = change.find((item) => item.userID === userID);
 
+      let updatedCart;
       if (existingUserCart) {
-        console.log("matching user found.");
+        console.log("Matching user found:", existingUserCart);
+        // Clone the existing products array to preserve all items
+        let updatedProducts = [...existingUserCart.product];
 
-        const existingProduct = existingUserCart.product.find(
-          (item) => item.id === product.id
+        // Check if the product already exists in the cart
+        const existingProductIndex = updatedProducts.findIndex(
+          (item) => item.id === id
         );
 
-        if (existingProduct) {
-          const newQuantity = existingProduct.quantity + 1;
-
-          const updatedProduct = {
-            ...existingProduct,
-            quantity: newQuantity,
+        if (existingProductIndex !== -1) {
+          // Product exists, increment quantity
+          updatedProducts[existingProductIndex] = {
+            ...updatedProducts[existingProductIndex],
+            quantity: (updatedProducts[existingProductIndex].quantity || 1) + 1,
           };
-
-          tempProduct[0].product.push(updatedProduct);
         } else {
-          tempProduct[0].product.push(product);
+          // Product doesn't exist, append it with quantity 1
+          updatedProducts = [...updatedProducts, { ...product, quantity: 1 }];
         }
-        console.log("Temp after update:", tempProduct);
-        setChange(tempProduct);
+
+        // Create the updated cart with all products
+        updatedCart = { ...existingUserCart, product: updatedProducts };
+        console.log("Updated Cart before PUT:", updatedCart);
+
+        // // Update server with PUT
+        const response = await axios.put(
+          `http://localhost:3002/order/${existingUserCart.id}`,
+          updatedCart
+        );
+        console.log("UPDATE RES", response.data);
+        getData();
       } else {
-        console.log("No matching user found.");
-        tempProduct.push(product);
+        console.log("No matching user found, creating new cart.");
+        // Create a new cart with the clicked product
 
-        console.log("Temp after adding new product:", tempProduct);
-
+        // Post new cart to server
         const response = await axios.post("http://localhost:3002/order", {
-          userID: userID.id,
-          product: tempProduct,
+          userID: userID,
+          product: [{ ...product, quantity: 1 }],
         });
-
-        // console.log("SETRES", response.data);
+        console.log("POST RES", response.data);
       }
-      // const response = await axios.post("http://localhost:3002/order", {
-      //   tempProduct,
-      // });
+
+      toast.success("Item added to cart!");
     } catch (error) {
-      console.log(error);
+      console.log("Error in setCartItems:", error);
+      toast.error("Failed to update cart.");
     }
   };
 
@@ -154,9 +106,7 @@ const Card = ({ product }) => {
         <button
           type="button"
           className="px-6 py-2 rounded-lg text-white text-sm font-semibold bg-blue-600 hover:bg-blue-700 transition-colors duration-300 w-full max-w-[220px]"
-          onClick={() => {
-            handleBtn();
-          }}
+          onClick={handleBtn}
         >
           Order Now
         </button>
@@ -166,15 +116,3 @@ const Card = ({ product }) => {
 };
 
 export default Card;
-
-//         response.data &&
-//         response.data.length > 0 &&
-//         response.data[0].cartItem
-//       ) {
-//         console.log("Cart items found:", response.data[0].cartItem);
-//         dispatch(setCartItems(response.data[0].cartItem));
-//         setZoo(response.data[0].cartItem);
-//       } else {
-//         console.log("No cart items found for this user.");
-//         dispatch(setCartItems([])); // Ensure Redux state is updated with an empty array
-//         setZoo([]); // Set local state to an empty array

@@ -40,7 +40,7 @@ const OrderComplete = () => {
         </h1>
         <div className="w-[300px] h-[2px] bg-green-500 my-4"></div>
 
-        {/* Current Order Section */}
+        
         <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-md mb-10">
           <div className="main-container flex flex-col gap-10">
             {reversedArray.map((order, index) => (
