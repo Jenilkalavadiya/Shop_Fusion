@@ -65,7 +65,7 @@ const Header = () => {
           {user && (
             <NavLink to="/cart" className="relative text-2xl">
               <p className="absolute bg-red-500 text-xs rounded-full text-white px-2 py-1 top-[-8px] right-[-12px]">
-                {cartItem.length}
+                {cartItem?.length}
               </p>
               <FaShoppingCart className="hover:text-yellow-400 transition-all" />
             </NavLink>

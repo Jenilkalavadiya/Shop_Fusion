@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { clearCart } from "../../redux/cartSlice";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-
+// import { useSelector } from "react-redux";
 import { checkoutvalidation } from "../../schemas/checkoutvalidation";
 
 const Checkform = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartItem = useSelector((state) => state.cartSlice.cart);
+  console.log("SDSSDsd", cartItem);
 
   const handleSubmit = async (values) => {
     const { Fname, Lname, Pnumber, Address, City, State, Zip } = values;
@@ -23,7 +25,6 @@ const Checkform = () => {
       Zip,
     };
 
-    const cartItem = JSON.parse(localStorage.getItem("cartItem"));
     const userID = JSON.parse(localStorage.getItem("isActive"));
     const orderId = generateOrderId();
 
@@ -38,7 +39,6 @@ const Checkform = () => {
       if (res.status === 201) {
         navigate("/ordercomplete");
         dispatch(clearCart());
-        // localStorage.removeItem("cartItem");
       }
     } catch (error) {
       console.log(error);
@@ -48,9 +48,6 @@ const Checkform = () => {
   const generateOrderId = () => {
     return `ORDER-${new Date().getTime()}-${Math.floor(Math.random() * 1000)}`;
   };
-
-  const cartItem = JSON.parse(localStorage.getItem("cartItem"));
-  // const userID = JSON.parse(localStorage.getItem("isActive"));
 
   const handleCancelClick = () => {
     navigate("/cart");

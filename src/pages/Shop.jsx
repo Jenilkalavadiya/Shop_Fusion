@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../components/ui/Card";
 import Spinner from "../components/ui/Spinner/Spinner";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import { setCartItems } from "../redux/cartSlice";
 
@@ -43,14 +43,16 @@ const Shop = () => {
 
   console.log("Change", change);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   // Logic to add to redux
 
+  const i = change?.[0];
+  const cartItems = i?.product;
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (change.length >= 0) {
-      dispatch(setCartItems(change)); // Dispatching the cartItems to Redux
-    }
-  }, [change, dispatch]); //
+    dispatch(setCartItems(cartItems));
+  });
+  
   // const cartItem = useSelector((state) => state.cartSlice.cart);
   // if (cartItem.length >= 0) {
   //   localStorage.setItem("cartItem", JSON.stringify(cartItem));
